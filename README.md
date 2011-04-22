@@ -6,12 +6,16 @@ for building the plugin setup.
 This is brand new so currently I only have a few plugins setup, as they were
 all located at github and it was easy to get it working.
 
+I have Pathogen seperated out from the rest of the plugins. Working on a
+better solution for this.
+
 # Usage
 
 Get the repository:
 
     git clone https://github.com/asenchi/dotvim ~/.vim
     cd ~/.vim
+    redo pathogen  # If you haven't installed pathogen.
     redo all clean # Substitute './bin/do' if you do not have 'redo'.
     
 
