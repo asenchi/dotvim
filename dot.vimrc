@@ -40,8 +40,9 @@ set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 
 filetype off
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+let s:bundles = tr(globpath(&runtimepath, 'bundle/*/'), "\n", ',')
+let s:afters = tr(globpath(s:bundles, 'after/'), "\n", ',')
+let &runtimepath = join([s:bundles, &runtimepath, s:afters], ',')
 filetype plugin indent on
 
 set background=light
