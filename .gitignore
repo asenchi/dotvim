@@ -1,0 +1,5 @@
+bundle/
+autoload/
+*.git
+*.did
+.do_built*
