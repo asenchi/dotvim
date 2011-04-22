@@ -12,7 +12,7 @@ Get the repository:
 
     git clone https://github.com/asenchi/dotvim ~/.vim
     cd ~/.vim
-    ./bin/do   # Or 'redo' if you have redo installed.
+    redo all clean # Substitute './bin/do' if you do not have 'redo'.
     
 
 # LICENSE
