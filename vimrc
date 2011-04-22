@@ -39,6 +39,11 @@ set wildmenu                    " tab completion
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 
+filetype off
+call pathogen#runtime_append_all_bundles()
+call pathogen#helptags()
+filetype plugin indent on
+
 set background=light
 colorscheme solarized
 
@@ -222,8 +227,6 @@ if &t_Co > 2 || has('gui_running')
 endif
 
 if has('autocmd')
-    filetype plugin indent on
-
     " Group these to make it easy to delete
     augroup vimrcEx
     au!
