@@ -173,8 +173,7 @@ if &t_Co > 2 || has('gui_running')
     set go-=T
     set go-=b
     set go-=h
-   set guifont=Inconsolata:h12
-    colorscheme github
+    set guifont=Inconsolata:h12
 
     " C-# switches to tab
     nmap <d-1> :tabn 1
