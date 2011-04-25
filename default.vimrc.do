@@ -1,1 +1,1 @@
-cp -f dot.vimrc ~/.vimrc
+ln -s $PWD/dot.vimrc ~/.vimrc

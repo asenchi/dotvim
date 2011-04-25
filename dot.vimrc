@@ -73,8 +73,7 @@ map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 map <leader>c :TlistToggle<CR>
 " NERDTree
 let NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$']
-map <leader>d :NERDTreeToggle<CR>
-
+map <F5> :NERDTreeToggle<CR>
 
 " Some neat rc file tweaks
 map <leader>v :call EditVimrc()<CR>
@@ -86,7 +85,6 @@ if has("autocmd")
     augroup vimrchooks
         au!
         autocmd bufwritepost .vimrc source ~/.vimrc
-        autocmd bufwritepost .gvimrc source ~/.gvimrc
     augroup END
 endif
 
@@ -190,7 +188,7 @@ if &t_Co > 2 || has('gui_running')
     nmap <c-s-tab> :tabprevious<cr>
 
     if has('gui_macvim')
-        set guifont=Menlo\ Regular:h14
+        set guifont=Menlo\ Regular:h16
         set fuoptions=maxvert,maxhorz
         set background=light
         colorscheme solarized
@@ -217,7 +215,6 @@ if &t_Co > 2 || has('gui_running')
 
         macmenu &File.New\ Tab key=<nop>
         map <D-E> :call StartTerm()<CR>
-        map <leader>a :Ack<space>
 
         nmap <D-[> <<
         nmap <D-]> >>
@@ -342,9 +339,8 @@ if has("autocmd")
     au BufNewFile,BufRead *.csv         setlocal ft=csv
     au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
     au BufRead,BufNewFile *.py          setlocal ft=python tw=80 ts=4 sw=4 expandtab
-endif
+    au BufRead,BufNewFile *.do          setlocal ft=sh tw=80 ts=4 sw=4 expandtab
 
-if has("autocmd")
     au FileType html,css,ruby setlocal ts=2 sts=2 sw=2 expandtab
     au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
     au FileType gitcommit setlocal tw=60
