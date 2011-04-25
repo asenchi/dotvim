@@ -1,1 +1,1 @@
-rm -rf *.git
+rm -f *.git
