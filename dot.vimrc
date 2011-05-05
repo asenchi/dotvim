@@ -71,6 +71,11 @@ let g:fugitive_git_executable = '~/Developer/bin/git'
 " manpages
 let $MANPAGER = '/usr/bin/less -is'
 
+" Gist
+let g:gist_clip_command = 'pbcopy'
+let g:gist_detect_filetype = 1
+let g:gist_open_browser_after_post = 1
+
 
 " I work mostly on a laptop, f1 gets in the ways sometimes.
 map <F1> <Esc>
