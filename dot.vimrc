@@ -76,20 +76,57 @@ let g:gist_clip_command = 'pbcopy'
 let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 
+" TaskList
+map <leader>tl :TaskList<CR>
+
+" Gundo
+map <leader>g :GundoToggle<CR>
+
+let g:pyflakes_use_quickfix = 0
+let g:pep8_map='<leader>8'
+
+au FileType python set omnifunc=pythoncomplete#Complete
+let g:SuperTabDefaultCompletionType = "context"
+
+set completeopt=menuone,longest,preview
+
+if exists("&colorcolumn")
+    set colorcolumn=80
+endif
+
+" rope
+map <leader>j :RopeGotoDefinition<CR>
+map <leader>r :RopeRename<CR>
+
+map <leader>dt :set makeprg=python\ manage.py\ test\|:call MakeGreen()<CR>
+
+" py.test
+" Execute the tests
+nmap <silent><Leader>pf <Esc>:Pytest file<CR>
+nmap <silent><Leader>pc <Esc>:Pytest class<CR>
+nmap <silent><Leader>pm <Esc>:Pytest method<CR>
+" cycle through test errors
+nmap <silent><Leader>pn <Esc>:Pytest next<CR>
+nmap <silent><Leader>pp <Esc>:Pytest previous<CR>
+nmap <silent><Leader>pe <Esc>:Pytest error<CR>
 
 " I work mostly on a laptop, f1 gets in the ways sometimes.
 map <F1> <Esc>
 map <leader>n :set number<CR>
 map <leader>N :set nonumber<CR>
+
 " shortcuts for appending local path
 map <leader>e :e <C-R>=expand("%:p:h") . "/"<CR>
 map <leader>te :tabe <C-R>=expand("%:p:h") . "/"<CR>
+
 " conque term
 map <leader>E :call StartTerm()<CR>
+
 " ctags
 let Tlist_Ctags_Cmd = '/Users/asenchi/Developer/bin/ctags'
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 map <leader>c :TlistToggle<CR>
+
 " NERDTree
 let NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$']
 map <F5> :NERDTreeToggle<CR>
@@ -104,6 +141,7 @@ if has("autocmd")
     augroup vimrchooks
         au!
         autocmd bufwritepost .vimrc source ~/.vimrc
+        autocmd bufwritepost dot.vimrc source ~/.vimrc
     augroup END
 endif
 
@@ -120,8 +158,6 @@ nmap <leader>w :w<CR>
 nmap <leader>W :w!<CR>
 " new line
 nmap <CR> o<Esc>
-" view registers
-nmap <leader>r :registers<CR>
 " Some sane shortcuts
 nmap F %
 nmap Y y$
@@ -170,7 +206,7 @@ map tm <Esc>:tabmove<cr>
 if has("ruby") || version > 700
     map <C-b> :LustyBufferExplorer<cr>
     map <leader>b :LustyBufferExplorer<cr>
-    map <leader>g :LustyBufferGrep<cr>
+    map <leader>lg :LustyBufferGrep<cr>
     map <leader>f :LustyFilesystemExplorerFromHere<cr>
 endif
 
