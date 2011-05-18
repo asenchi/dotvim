@@ -17,6 +17,15 @@ Get the repository:
     cd ~/.vim
     redo pathogen  # If you haven't installed pathogen.
     redo all clean # Substitute './bin/do' if you do not have 'redo'.
+
+# Adding plugins
+
+Currently only git is supported, but that shouldn't be too big of an issue
+considering this [repo](https://github.com/vim-scripts).
+
+To add a plugin, paste the git link into plugins.list and then run:
+
+    redo # Or ./bin/do if you do not have 'redo'
     
 
 # LICENSE
