@@ -397,11 +397,13 @@ if has("autocmd")
     au BufRead,BufNewFile *.do          setlocal ft=sh tw=80 ts=4 sw=4 expandtab
 
     au FileType html,css,ruby setlocal ts=2 sts=2 sw=2 expandtab
+    au FileType html set ft=html.django
     au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
     au FileType gitcommit setlocal tw=60
     au FileType make setlocal noexpandtab
     au FileType 
         \ perl setlocal makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m autowrite
     au FileType python setlocal complete+=k~/.vim/syntax/python.vim "isk+=.,(
+    au FileType python set ft=python.django
     let html_no_rendering=1
 endif

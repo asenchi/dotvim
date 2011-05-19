@@ -6,16 +6,13 @@ https://github.com/sjbach/lusty.git
 https://github.com/scrooloose/nerdtree.git
 https://github.com/cakebaker/scss-syntax.vim.git
 https://github.com/altercation/vim-colors-solarized.git
-https://github.com/msanders/snipmate.vim.git
-https://github.com/tpope/vim-endwise.git
+https://github.com/asenchi/snipmate.vim.git
 https://github.com/plasticboy/vim-markdown.git
 https://github.com/tpope/vim-surround.git
 https://github.com/vim-scripts/taglist.vim.git
 https://github.com/vim-scripts/Conque-Shell.git
 https://github.com/kevinw/pyflakes-vim.git
-https://github.com/ervandew/supertab.git
 https://github.com/fs111/pydoc.vim.git
 https://github.com/vim-scripts/pep8.git
-https://github.com/alfredodeza/pytest.vim.git
 https://github.com/vim-scripts/TaskList.vim.git
 https://github.com/sontek/rope-vim.git
