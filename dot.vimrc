@@ -1,6 +1,6 @@
-" vimrc
-" author: curt micol
-" email: asenchi@asenchi.com
+" File: dot.vimrc
+" Author: curt micol
+" Email: asenchi@asenchi.com
 
 " Copyright (c) 2011, Curt Micol <asenchi@asenchi.com>
 " 
@@ -243,7 +243,7 @@ if &t_Co > 2 || has('gui_running')
     nmap <c-s-tab> :tabprevious<cr>
 
     if has('gui_macvim')
-        set guifont=Menlo\ Regular:h16
+        set guifont=Menlo\ Bold:h16
         set fuoptions=maxvert,maxhorz
         set background=light
         colorscheme solarized
@@ -268,7 +268,6 @@ if &t_Co > 2 || has('gui_running')
         map! <D-9> <C-O>:tabn 9<CR>
         set antialias
 
-        macmenu &File.New\ Tab key=<nop>
         map <D-E> :call StartTerm()<CR>
 
         nmap <D-[> <<
