@@ -53,12 +53,14 @@ set wildmenu                    " tab completion
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 
+" pathogen: the std way never worked for me, here's the hack.
 filetype off
 let s:bundles = tr(globpath(&runtimepath, 'bundle/*/'), "\n", ',')
 let s:afters = tr(globpath(s:bundles, 'after/'), "\n", ',')
 let &runtimepath = join([s:bundles, &runtimepath, s:afters], ',')
 filetype plugin indent on
 
+" color!
 set background=light
 colorscheme solarized
 
@@ -66,10 +68,11 @@ let mapleader = ","             " leader key map
 let g:mapleader = ","
 let maplocalleader = "\\"
 
-" fugitive
-let g:fugitive_git_executable = '~/Developer/bin/git'
 " manpages
 let $MANPAGER = '/usr/bin/less -is'
+
+" fugitive
+let g:fugitive_git_executable = '~/Developer/bin/git'
 
 " Gist
 let g:gist_clip_command = 'pbcopy'
@@ -78,12 +81,6 @@ let g:gist_open_browser_after_post = 1
 
 " TaskList
 map <leader>tl :TaskList<CR>
-
-" Gundo
-map <leader>g :GundoToggle<CR>
-
-let g:pyflakes_use_quickfix = 0
-let g:pep8_map='<leader>8'
 
 au FileType python set omnifunc=pythoncomplete#Complete
 let g:SuperTabDefaultCompletionType = "context"
@@ -94,26 +91,8 @@ if exists("&colorcolumn")
     set colorcolumn=80
 endif
 
-" rope
-map <leader>j :RopeGotoDefinition<CR>
-map <leader>r :RopeRename<CR>
-
-map <leader>dt :set makeprg=python\ manage.py\ test\|:call MakeGreen()<CR>
-
-" py.test
-" Execute the tests
-nmap <silent><Leader>pf <Esc>:Pytest file<CR>
-nmap <silent><Leader>pc <Esc>:Pytest class<CR>
-nmap <silent><Leader>pm <Esc>:Pytest method<CR>
-" cycle through test errors
-nmap <silent><Leader>pn <Esc>:Pytest next<CR>
-nmap <silent><Leader>pp <Esc>:Pytest previous<CR>
-nmap <silent><Leader>pe <Esc>:Pytest error<CR>
-
 " I work mostly on a laptop, f1 gets in the ways sometimes.
 map <F1> <Esc>
-map <leader>n :set number<CR>
-map <leader>N :set nonumber<CR>
 
 " shortcuts for appending local path
 map <leader>e :e <C-R>=expand("%:p:h") . "/"<CR>
@@ -121,6 +100,7 @@ map <leader>te :tabe <C-R>=expand("%:p:h") . "/"<CR>
 
 " conque term
 map <leader>E :call StartTerm()<CR>
+map <D-e> :call StartTerm()<CR>
 
 " ctags
 let Tlist_Ctags_Cmd = '/Users/asenchi/Developer/bin/ctags'
@@ -134,7 +114,7 @@ map <F5> :NERDTreeToggle<CR>
 " Some neat rc file tweaks
 map <leader>v :call EditVimrc()<CR>
 function! EditVimrc()
-    execute ':split ~/.vimrc'
+    execute ':tabedit ~/.vimrc'
 endfunction
 
 if has("autocmd")
@@ -144,10 +124,6 @@ if has("autocmd")
         autocmd bufwritepost dot.vimrc source ~/.vimrc
     augroup END
 endif
-
-" Inserts the path of the currently edited file into a command
-" Command mode: Ctrl+P
-cmap <C-P> <C-R>=expand("%:p:h") . "/" <CR>
 
 " change path across all windows
 nmap <leader>cd :cd%:p:h<CR>
@@ -169,10 +145,6 @@ let @h = "yypVr"
 nnoremap <leader><space> :nohlsearch<CR>
 " replace <ESC> functionality with easier to reach key cmds.
 inoremap jj <ESC>
-
-" tab for brackets
-nnoremap <tab> %
-vnoremap <tab> %
 
 " fill window with buffer
 map <leader>F <C-W>_
@@ -208,6 +180,10 @@ if has("ruby") || version > 700
     map <leader>b :LustyBufferExplorer<cr>
     map <leader>lg :LustyBufferGrep<cr>
     map <leader>f :LustyFilesystemExplorerFromHere<cr>
+else
+    let g:LustyExplorerSuppressRubyWarning = 1
+    let g:loaded_lustyexplorer = 1
+    let g:loaded_lustyjuggler = 1
 endif
 
 if &t_Co > 2 || has('gui_running')
@@ -243,7 +219,7 @@ if &t_Co > 2 || has('gui_running')
     nmap <c-s-tab> :tabprevious<cr>
 
     if has('gui_macvim')
-        set guifont=Menlo\ Bold:h16
+        set guifont=Menlo\ Regular:h16
         set fuoptions=maxvert,maxhorz
         set background=light
         colorscheme solarized
@@ -316,17 +292,29 @@ if v:version >= 703
     nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
 endif
 
+map <leader>n :call ToggleNumber()<CR>
+
+function! ToggleNumber()
+    if &number
+        set nonumber
+    else
+        set number
+    endif
+endfunction
+
 function! ToggleRelativeAbsoluteNumber()
-  if &number
-    set relativenumber
-  else
-    set number
-  endif
+    if &number
+        set relativenumber
+    else
+        call ToggleNumber()
+    endif
 endfunction
 
 function! CurDir()
     let curdir = getcwd()
-    return curdir
+    let curdir_a = split(curdir, '/')
+    let reldir = join([curdir_a[-2], curdir_a[-1]], '/')
+    return reldir
 endfunction
 
 function! GuiTabLabel()
@@ -335,15 +323,15 @@ function! GuiTabLabel()
     " modified since the last save?
     let buflist = tabpagebuflist(v:lnum)
     for bufnr in buflist
-            if getbufvar(bufnr, '&modified')
-                    let label .= '*'
-                    break
-            endif
+        if getbufvar(bufnr, '&modified')
+            let label .= '*'
+            break
+        endif
     endfor
     " count number of open windows in the tab
     let wincount = tabpagewinnr(v:lnum, '$')
     if wincount > 1
-            let label .= ', '.wincount
+        let label .= ', '.wincount
     endif
     let label .= ' ] '
     " add the file name without path information
@@ -358,13 +346,8 @@ endfunction
 map <leader>S :call StripWhitespace ()<CR>
 
 function! StartTerm()
-    ConqueTermTab zsh --login
+    ConqueTermSplit zsh --login
     setlocal listchars=tab:\ \
-endfunction
-
-function! Touch(file)
-    execute "!touch " . a:file
-    call s:UpdateNERDTree(1)
 endfunction
 
 nmap <C-S-P> :call <SID>SynStack()<CR>
@@ -383,26 +366,24 @@ function! Browser()
 endfunction
 map <leader>B :call Browser()<CR>
 
-set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ %r%{CurDir()}%h\ %{fugitive#statusline()}
+set statusline=%{fugitive#statusline()}[%l,%v\ %P%M]\ %f\ %r%h%w\ %r%{CurDir()}%h
 
 if has("autocmd")
-    au BufRead,BufNewFile *.sql         setlocal ft=pgsql
-    au BufRead,BufNewFile *.md          setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
-    au BufRead,BufNewFile *.markdown    setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
-    au BufRead,BufNewFile *.rst         setlocal ft=rst tw=78 ts=4 sw=4 expandtab
-    au BufNewFile,BufRead *.csv         setlocal ft=csv
+    au BufRead,BufNewFile *.sql      setlocal ft=pgsql
+    au BufRead,BufNewFile *.md       setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
+    au BufRead,BufNewFile *.markdown setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
+    au BufRead,BufNewFile *.rst      setlocal ft=rst tw=78 ts=4 sw=4 expandtab
+    au BufNewFile,BufRead *.csv      setlocal ft=csv
     au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
-    au BufRead,BufNewFile *.py          setlocal ft=python tw=80 ts=4 sw=4 expandtab
-    au BufRead,BufNewFile *.do          setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.py       setlocal ft=python tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.do       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
 
     au FileType html,css,ruby setlocal ts=2 sts=2 sw=2 expandtab
-    au FileType html set ft=html.django
     au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
     au FileType gitcommit setlocal tw=60
     au FileType make setlocal noexpandtab
     au FileType 
         \ perl setlocal makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m autowrite
     au FileType python setlocal complete+=k~/.vim/syntax/python.vim "isk+=.,(
-    au FileType python set ft=python.django
     let html_no_rendering=1
 endif
