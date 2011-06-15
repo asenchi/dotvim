@@ -48,6 +48,7 @@ set backupdir=~/tmp/sessions    " backups
 set backupcopy=yes
 set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
 set noswapfile
+set grepprg=git\ grep\ -n
 
 set wildmenu                    " tab completion
 set wildmode=list:longest,list:full
@@ -202,7 +203,7 @@ if &t_Co > 2 || has('gui_running')
     set go-=T
     set go-=b
     set go-=h
-    set guifont=Inconsolata:h12
+    set guifont=Inconsolata:h14
 
     " C-# switches to tab
     nmap <d-1> :tabn 1
@@ -219,7 +220,7 @@ if &t_Co > 2 || has('gui_running')
     nmap <c-s-tab> :tabprevious<cr>
 
     if has('gui_macvim')
-        set guifont=Menlo\ Regular:h16
+        set guifont=DejaVu\ Sans\ Mono:h14
         set fuoptions=maxvert,maxhorz
         set background=light
         colorscheme solarized
