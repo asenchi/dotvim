@@ -1,7 +1,10 @@
 " File: dot.vimrc
-" Author: curt micol
+" Author: Curt Micol
 " Email: asenchi@asenchi.com
 
+" -----------------------------------------------------------------------------
+" LICENSE
+" -----------------------------------------------------------------------------
 " Copyright (c) 2011, Curt Micol <asenchi@asenchi.com>
 " 
 " Permission to use, copy, modify, and/or distribute this software for any
@@ -16,104 +19,158 @@
 " ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 " OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-" A must for all VIM's
+" -----------------------------------------------------------------------------
+" General
+" -----------------------------------------------------------------------------
 set nocompatible                " a must
+set ffs=unix,dos,mac
 set hidden
+set history=1000                " remember 1000 commands
+set visualbell
 set ruler
 set title
 set showcmd
 set laststatus=2                " statusline tweaks
 set ch=1
-set ffs=unix,dos,mac
-set history=1000                " remember 1000 commands
-set visualbell
-set autoindent                  " indentation
-set smartindent
-set scrolloff=3
-set hlsearch                    " highlight search
-set showmatch                   " show matches
-set incsearch
-set ignorecase                  " ignore case on searches
-set tabstop=8                   " whitespace
-set shiftwidth=4                " We default to 4 spaces
-set softtabstop=4
-set showtabline=2
-set expandtab
-set linebreak
 set textwidth=78                " 78 columns
+set scrolloff=3
+set showmatch                   " show matches
+set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
 set pastetoggle=<F6>            " Turn off formatting when pasting
-set backupdir=~/tmp/sessions    " backups
-set backupcopy=yes
-set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
-set noswapfile
-set grepprg=git\ grep\ -n
 
-set wildmenu                    " tab completion
-set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
-
-" pathogen: the std way never worked for me, here's the hack.
+" -----------------------------------------------------------------------------
+" Pathogen
+" -----------------------------------------------------------------------------
 filetype off
 let s:bundles = tr(globpath(&runtimepath, 'bundle/*/'), "\n", ',')
 let s:afters = tr(globpath(s:bundles, 'after/'), "\n", ',')
 let &runtimepath = join([s:bundles, &runtimepath, s:afters], ',')
 filetype plugin indent on
 
-" color!
-set background=light
-colorscheme solarized
+" -----------------------------------------------------------------------------
+" PATH
+" -----------------------------------------------------------------------------
+if system('uname') =~ 'Darwin'
+    let $PATH = '~/Developer/bin:' .
+        \ '~/Developer/share/python:' .
+        \ '/usr/local/bin:/usr/local/sbin:' .
+        \ $PATH
+endif
 
+" -----------------------------------------------------------------------------
+" Map leader key (',')
+" -----------------------------------------------------------------------------
 let mapleader = ","             " leader key map
 let g:mapleader = ","
 let maplocalleader = "\\"
 
-" manpages
-let $MANPAGER = '/usr/bin/less -is'
-
-" fugitive
-let g:fugitive_git_executable = '~/Developer/bin/git'
-
-" Gist
-let g:gist_clip_command = 'pbcopy'
-let g:gist_detect_filetype = 1
-let g:gist_open_browser_after_post = 1
-
-" TaskList
-map <leader>tl :TaskList<CR>
-
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
-
-set completeopt=menuone,longest,preview
+" -----------------------------------------------------------------------------
+" Color!
+" -----------------------------------------------------------------------------
+set background=light
+colorscheme solarized
 
 if exists("&colorcolumn")
     set colorcolumn=80
 endif
 
-" I work mostly on a laptop, f1 gets in the ways sometimes.
-map <F1> <Esc>
+" -----------------------------------------------------------------------------
+" Indentation
+" -----------------------------------------------------------------------------
+set autoindent                  " indentation
+set smartindent                 " smart indentation on new line
+set tabstop=8                   " number of spaces a <tab> counts for
+set shiftwidth=4                " We default to 4 spaces
+set softtabstop=4               " "feels" like tabs are being inserted
+set showtabline=2               " display tab page
+set expandtab                   " use appropriate number of spaces insert-mode
 
-" shortcuts for appending local path
-map <leader>e :e <C-R>=expand("%:p:h") . "/"<CR>
-map <leader>te :tabe <C-R>=expand("%:p:h") . "/"<CR>
+" -----------------------------------------------------------------------------
+" Search
+" -----------------------------------------------------------------------------
+set hlsearch                    " highlight search
+set incsearch                   " show pattern as search is typed
+set ignorecase                  " ignore case on searches
 
-" conque term
+" -----------------------------------------------------------------------------
+" Backups and swap
+" -----------------------------------------------------------------------------
+set backupdir=~/tmp/sessions    " backups
+set backupcopy=yes
+set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
+set noswapfile
+
+" -----------------------------------------------------------------------------
+" Wildmenu items
+" -----------------------------------------------------------------------------
+set wildmenu                    " enhanced command-line completion
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
+
+" -----------------------------------------------------------------------------
+" misc
+" -----------------------------------------------------------------------------
+set grepprg=git\ grep\ -n
+let $MANPAGER = '/usr/bin/less -is'
+set list
+set listchars=tab:▸\ ,eol:¬
+
+" -----------------------------------------------------------------------------
+" fugitive
+" -----------------------------------------------------------------------------
+let g:fugitive_git_executable = '~/Developer/bin/git'
+
+" -----------------------------------------------------------------------------
+" gist
+" -----------------------------------------------------------------------------
+let g:gist_clip_command = 'pbcopy'
+let g:gist_detect_filetype = 1
+let g:gist_open_browser_after_post = 1
+
+" -----------------------------------------------------------------------------
+" supertab
+" -----------------------------------------------------------------------------
+au FileType python set omnifunc=pythoncomplete#Complete
+let g:SuperTabDefaultCompletionType = "context"
+
+" -----------------------------------------------------------------------------
+" Completion
+" -----------------------------------------------------------------------------
+set completeopt=menuone,longest,preview
+
+" -----------------------------------------------------------------------------
+" ConqueTerm
+" -----------------------------------------------------------------------------
 map <leader>E :call StartTerm()<CR>
-map <D-e> :call StartTerm()<CR>
+if has('gui_macvim')
+    map <D-e> :call StartTerm()<CR>
+endif
 
+function! StartTerm()
+    ConqueTermSplit zsh --login
+    setlocal listchars=tab:\ \
+endfunction
+
+" -----------------------------------------------------------------------------
 " ctags
+" -----------------------------------------------------------------------------
 let Tlist_Ctags_Cmd = '/Users/asenchi/Developer/bin/ctags'
 map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
 map <leader>c :TlistToggle<CR>
 
+" -----------------------------------------------------------------------------
 " NERDTree
+" -----------------------------------------------------------------------------
 let NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$']
 map <F5> :NERDTreeToggle<CR>
 
-" Some neat rc file tweaks
+" -----------------------------------------------------------------------------
+" vimrc hax
+" -----------------------------------------------------------------------------
 map <leader>v :call EditVimrc()<CR>
+
 function! EditVimrc()
     execute ':tabedit ~/.vimrc'
 endfunction
@@ -126,86 +183,72 @@ if has("autocmd")
     augroup END
 endif
 
-" change path across all windows
+" -----------------------------------------------------------------------------
+" mappings!
+" -----------------------------------------------------------------------------
+" Edit a new file using current file's path
+map <leader>e  :e <C-R>=expand("%:p:h") . "/"<CR>
+map <leader>te :tabe <C-R>=expand("%:p:h") . "/"<CR>
+
+" Change path for all buffers or just locally
 nmap <leader>cd :cd%:p:h<CR>
-" change path locally
-nmap <leader>. :lcd%:p:h<CR>
-" quick write
+nmap <leader>.  :lcd%:p:h<CR>
+
+" Quick write
 nmap <leader>w :w<CR>
 nmap <leader>W :w!<CR>
-" new line
+
+" New line
 nmap <CR> o<Esc>
+
 " Some sane shortcuts
 nmap F %
 nmap Y y$
-
-" Press '@h' and the character you want to use for heading
-let @h = "yypVr"
-
-" remove search hilight
-nnoremap <leader><space> :nohlsearch<CR>
-" replace <ESC> functionality with easier to reach key cmds.
-inoremap jj <ESC>
-
-" fill window with buffer
-map <leader>F <C-W>_
 map <C-k> <C-W>k
 map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Press '@h' and the character you want to use for heading (great for ReST)
+let @h = "yypVr"
+
+" Remove search hilight
+nnoremap <leader><space> :nohlsearch<CR>
+
+" Replace <ESC> functionality with easier to reach key cmds.
+inoremap jj <ESC>
+
+" Fill window with buffer
+map <leader>F <C-W>_
+
 " Move selection up and down
-map <C-Down> ddp
-map <C-Up> dd<Up>P
+map  <C-Down> ddp
+map  <C-Up>   dd<Up>P
 vmap <C-Down> xp`[V`]
-vmap <C-Up> x<Up>P`[V`]
+vmap <C-Up>   x<Up>P`[V`]
 
 " mimic some common emacs keys
+map  <C-e> $
+map  <C-a> 0
 imap <C-a> <C-o>0
 imap <C-e> <C-o>$
-map <C-e> $
-map <C-a> 0
 
-" If I forgot to sudo vim a file, do that with :w!!
+" For when I need to sudo a sandwich
 cmap w!! %!sudo tee > /dev/null %
 
+" date shortcuts
+iab YMD <C-R>=strftime("%Y-%m-%d")<CR>
+iab NOW <C-R>=strftime("%c")<CR>
+" -----------------------------------------------------------------------------
 " tabs!
+" -----------------------------------------------------------------------------
 map tn <Esc>:tabnext<cr>
 map tp <Esc>:tabprev<cr>
 map tc <Esc>:tabnew<cr>
 map td <Esc>:tabclose<cr>
 map tm <Esc>:tabmove<cr>
 
-if has("ruby") || version > 700
-    map <C-b> :LustyBufferExplorer<cr>
-    map <leader>b :LustyBufferExplorer<cr>
-    map <leader>lg :LustyBufferGrep<cr>
-    map <leader>f :LustyFilesystemExplorerFromHere<cr>
-else
-    let g:LustyExplorerSuppressRubyWarning = 1
-    let g:loaded_lustyexplorer = 1
-    let g:loaded_lustyjuggler = 1
-endif
-
 if &t_Co > 2 || has('gui_running')
-    syntax on
-    set hlsearch
-    let g:manpageview_pgm= 'man -P "/usr/bin/less -is"'
-
-    set cursorline
-    set encoding=utf-8
-    set go+=c
-    set go-=m
-    set go-=r
-    set go-=R
-    set go-=l
-    set go-=L
-    set go-=T
-    set go-=b
-    set go-=h
-    set guifont=Inconsolata:h14
-
-    " C-# switches to tab
     nmap <d-1> :tabn 1
     nmap <d-2> :tabn 2
     nmap <d-3> :tabn 3
@@ -215,16 +258,10 @@ if &t_Co > 2 || has('gui_running')
     nmap <d-7> :tabn 7
     nmap <d-8> :tabn 8
     nmap <d-9> :tabn 9
-
     nmap <c-tab> :tabnext<cr>
     nmap <c-s-tab> :tabprevious<cr>
 
     if has('gui_macvim')
-        set guifont=DejaVu\ Sans\ Mono:h14
-        set fuoptions=maxvert,maxhorz
-        set background=light
-        colorscheme solarized
-
         map <D-1> :tabn 1<CR>
         map <D-2> :tabn 2<CR>
         map <D-3> :tabn 3<CR>
@@ -243,17 +280,77 @@ if &t_Co > 2 || has('gui_running')
         map! <D-7> <C-O>:tabn 7<CR>
         map! <D-8> <C-O>:tabn 8<CR>
         map! <D-9> <C-O>:tabn 9<CR>
-        set antialias
-
-        map <D-E> :call StartTerm()<CR>
-
-        nmap <D-[> <<
-        nmap <D-]> >>
-        vmap <D-[> <gv
-        vmap <D-]> >gv
     endif
 endif
 
+" -----------------------------------------------------------------------------
+" guioptions
+" -----------------------------------------------------------------------------
+if &t_Co > 2 || has('gui_running')
+    syntax on
+    set hlsearch
+    let g:manpageview_pgm= 'man -P "/usr/bin/less -is"'
+    set cursorline
+    set encoding=utf-8
+    set go+=c
+    set go-=m
+    set go-=r
+    set go-=R
+    set go-=l
+    set go-=L
+    set go-=T
+    set go-=b
+    set go-=h
+    set guifont=Inconsolata:h14
+
+    if has('gui_macvim')
+        set guifont=DejaVu\ Sans\ Mono:h14
+        set fuoptions=maxvert,maxhorz
+        set background=light
+        set antialias
+        colorscheme solarized
+    endif
+endif
+
+" -----------------------------------------------------------------------------
+" Strip whitespace
+" -----------------------------------------------------------------------------
+map <leader>S :call StripWhitespace ()<CR>
+function! StripWhitespace ()
+    exec ':%s/ \+$//gc'
+endfunction
+
+" -----------------------------------------------------------------------------
+" toggle between number and relative number on ,l
+" -----------------------------------------------------------------------------
+map <leader>n :call ToggleNumber()<CR>
+if v:version >= 703
+    set number
+    nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
+endif
+
+function! ToggleRelativeAbsoluteNumber()
+    if &number
+        set relativenumber
+    else
+        call ToggleNumber()
+    endif
+endfunction
+
+" -----------------------------------------------------------------------------
+" Open browser on the URL
+" -----------------------------------------------------------------------------
+map <leader>B :call Browser()<CR>
+function! Browser()
+    let line0 = getline (".")
+    let line = matchstr (line0, "http[^ )]*")
+    let line = escape (line, "#?&;|%")
+    exec ':silent !open ' . "\"" . line . "\""
+endfunction
+
+" -----------------------------------------------------------------------------
+" Hax
+" -----------------------------------------------------------------------------
 if has('autocmd')
     " Group these to make it easy to delete
     augroup vimrcEx
@@ -266,11 +363,6 @@ if has('autocmd')
         \   exe "normal! g`\"" |
         \ end
     augroup END
-
-    " Spell check on when entering insert mode
-    "autocmd InsertEnter * setlocal spell
-    " No spell check when leaving insert mode
-    "autocmd InsertLeave * setlocal nospell
 else
     set autoindent
 endif
@@ -283,34 +375,9 @@ if !exists(":DiffOrig")
         \ | wincmd p | diffthis
 endif
 
-" date shortcuts
-iab YMD <C-R>=strftime("%Y-%m-%d")<CR>
-iab NOW <C-R>=strftime("%c")<CR>
-
-" toggle between number and relative number on ,l
-if v:version >= 703
-    set number
-    nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-endif
-
-map <leader>n :call ToggleNumber()<CR>
-
-function! ToggleNumber()
-    if &number
-        set nonumber
-    else
-        set number
-    endif
-endfunction
-
-function! ToggleRelativeAbsoluteNumber()
-    if &number
-        set relativenumber
-    else
-        call ToggleNumber()
-    endif
-endfunction
-
+" -----------------------------------------------------------------------------
+" Functions
+" -----------------------------------------------------------------------------
 function! CurDir()
     let curdir = getcwd()
     let curdir_a = split(curdir, '/')
@@ -341,16 +408,6 @@ function! GuiTabLabel()
     return label
 endfunction
 
-function! StripWhitespace ()
-    exec ':%s/ \+$//gc'
-endfunction
-map <leader>S :call StripWhitespace ()<CR>
-
-function! StartTerm()
-    ConqueTermSplit zsh --login
-    setlocal listchars=tab:\ \
-endfunction
-
 nmap <C-S-P> :call <SID>SynStack()<CR>
 function! <SID>SynStack()
     if !exists("*synstack")
@@ -359,32 +416,72 @@ function! <SID>SynStack()
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction
 
-function! Browser()
-    let line0 = getline (".")
-    let line = matchstr (line0, "http[^ )]*")
-    let line = escape (line, "#?&;|%")
-    exec ':silent !open ' . "\"" . line . "\""
-endfunction
-map <leader>B :call Browser()<CR>
-
-set statusline=%{fugitive#statusline()}[%l,%v\ %P%M]\ %f\ %r%h%w\ %r%{CurDir()}%h
-
 if has("autocmd")
+" -----------------------------------------------------------------------------
+" python
+" -----------------------------------------------------------------------------
+    au BufRead,BufNewFile *.py       setlocal ft=python tw=80 ts=4 sw=4 et
+    au FileType python setlocal complete+=k~/.vim/syntax/python.vim "isk+=.,(
+" -----------------------------------------------------------------------------
+" sql
+" -----------------------------------------------------------------------------
     au BufRead,BufNewFile *.sql      setlocal ft=pgsql
+" -----------------------------------------------------------------------------
+" markdown
+" -----------------------------------------------------------------------------
     au BufRead,BufNewFile *.md       setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
     au BufRead,BufNewFile *.markdown setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
+" -----------------------------------------------------------------------------
+" ReST
+" -----------------------------------------------------------------------------
     au BufRead,BufNewFile *.rst      setlocal ft=rst tw=78 ts=4 sw=4 expandtab
+" -----------------------------------------------------------------------------
+" CSV
+" -----------------------------------------------------------------------------
     au BufNewFile,BufRead *.csv      setlocal ft=csv
-    au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru}    set ft=ruby
-    au BufRead,BufNewFile *.py       setlocal ft=python tw=80 ts=4 sw=4 expandtab
+" -----------------------------------------------------------------------------
+" ruby
+" -----------------------------------------------------------------------------
+    au BufRead,BufNewFile Gemfile    setlocal ft=ruby
+    au BufRead,BufNewFile Rakefile   setlocal ft=ruby
+    au BufRead,BufNewFile Thorfile   setlocal ft=ruby
+    au BufRead,BufNewFile *.ru       setlocal ft=ruby
+    au FileType ruby                 setlocal tw=80 ts=2 sts=2 sw=2 expandtab
+" -----------------------------------------------------------------------------
+" redo
+" -----------------------------------------------------------------------------
     au BufRead,BufNewFile *.do       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
-
-    au FileType html,css,ruby setlocal ts=2 sts=2 sw=2 expandtab
-    au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
-    au FileType gitcommit setlocal tw=60
-    au FileType make setlocal noexpandtab
-    au FileType 
-        \ perl setlocal makeprg=perl\ -c\ %\ $* errorformat=%f:%l:%m autowrite
-    au FileType python setlocal complete+=k~/.vim/syntax/python.vim "isk+=.,(
+" -----------------------------------------------------------------------------
+" shell
+" -----------------------------------------------------------------------------
+    au BufRead,BufNewFile *.sh       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.zsh      setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.bash     setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+" -----------------------------------------------------------------------------
+" html/css
+" -----------------------------------------------------------------------------
+    au FileType html,css setlocal ts=2 sts=2 sw=2 expandtab
     let html_no_rendering=1
+" -----------------------------------------------------------------------------
+" javascript
+" -----------------------------------------------------------------------------
+    au FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+" -----------------------------------------------------------------------------
+" git
+" -----------------------------------------------------------------------------
+    au FileType gitcommit setlocal tw=60
+" -----------------------------------------------------------------------------
+" make
+" -----------------------------------------------------------------------------
+    au FileType make setlocal noexpandtab
+" -----------------------------------------------------------------------------
+" perl
+" -----------------------------------------------------------------------------
+    au FileType perl setlocal mp=perl\ -c\ %\ $* errorformat=%f:%l:%m aw
+" -----------------------------------------------------------------------------
 endif
+
+" -----------------------------------------------------------------------------
+" statusline
+" -----------------------------------------------------------------------------
+set stl=%{fugitive#statusline()}[%l,%v\ %P%M]\ %f\ %r%h%w\ %r%{CurDir()}%h
