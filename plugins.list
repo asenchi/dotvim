@@ -2,7 +2,6 @@ https://github.com/mileszs/ack.vim.git
 https://github.com/tpope/vim-fugitive.git
 https://github.com/mattn/gist-vim.git
 https://github.com/tpope/vim-git.git
-https://github.com/sjbach/lusty.git
 https://github.com/scrooloose/nerdtree.git
 https://github.com/altercation/vim-colors-solarized.git
 https://github.com/asenchi/snipmate.vim.git
@@ -10,6 +9,6 @@ https://github.com/plasticboy/vim-markdown.git
 https://github.com/tpope/vim-surround.git
 https://github.com/vim-scripts/taglist.vim.git
 https://github.com/vim-scripts/Conque-Shell.git
-https://github.com/vim-scripts/TaskList.vim.git
 https://github.com/ervandew/supertab.git
 https://github.com/jmcantrell/vim-virtualenv.git
+https://github.com/vim-scripts/Command-T.git
