@@ -69,6 +69,8 @@ let maplocalleader = "\\"
 " -----------------------------------------------------------------------------
 " Color!
 " -----------------------------------------------------------------------------
+colorscheme ron
+
 "if exists("&colorcolumn")
 "    set colorcolumn=80
 "endif
@@ -95,6 +97,7 @@ set ignorecase                  " ignore case on searches
 " Backups and swap
 " -----------------------------------------------------------------------------
 set backupdir=~/tmp/sessions    " backups
+
 set backupcopy=yes
 set backupskip=/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*
 set noswapfile
