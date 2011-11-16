@@ -69,12 +69,9 @@ let maplocalleader = "\\"
 " -----------------------------------------------------------------------------
 " Color!
 " -----------------------------------------------------------------------------
-set background=light
-colorscheme solarized
-
-if exists("&colorcolumn")
-    set colorcolumn=80
-endif
+"if exists("&colorcolumn")
+"    set colorcolumn=80
+"endif
 
 " -----------------------------------------------------------------------------
 " Indentation
@@ -308,7 +305,6 @@ if &t_Co > 2 || has('gui_running')
         set fuoptions=maxvert,maxhorz
         set background=light
         set antialias
-        colorscheme solarized
     endif
 endif
 
@@ -323,19 +319,19 @@ endfunction
 " -----------------------------------------------------------------------------
 " toggle between number and relative number on ,l
 " -----------------------------------------------------------------------------
-map <leader>n :call ToggleNumber()<CR>
-if v:version >= 703
-    set number
-    nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-endif
-
-function! ToggleRelativeAbsoluteNumber()
-    if &number
-        set relativenumber
-    else
-        call ToggleNumber()
-    endif
-endfunction
+"map <leader>n :call ToggleNumber()<CR>
+"if v:version >= 703
+"    set number
+"    nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
+"endif
+"
+"function! ToggleRelativeAbsoluteNumber()
+"    if &number
+"        set relativenumber
+"    else
+"        call ToggleNumber()
+"    endif
+"endfunction
 
 " -----------------------------------------------------------------------------
 " Open browser on the URL
