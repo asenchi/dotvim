@@ -366,6 +366,20 @@ else
     set autoindent
 endif
 
+" The following automatically runs gofmt when you save a buffer. Makes it easy
+" to follow formatting rules and always keep your code according to standard.
+if has('autocmd')
+    augroup gofmtBuffer
+    au!
+    autocmd BufWritePre *.go :call GoFormatBuffer()
+    augroup END
+endif
+function! GoFormatBuffer()
+    let curr=line(".")
+    %!${GOROOT}/bin/gofmt
+    call cursor(curr, 1)
+endfunction
+
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from.
 " Only define it when not defined already.
@@ -450,6 +464,10 @@ if has("autocmd")
 " redo
 " -----------------------------------------------------------------------------
     au BufRead,BufNewFile *.do       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+" -----------------------------------------------------------------------------
+" golang
+" -----------------------------------------------------------------------------
+    au BufRead,BufNewFile *.go       setlocal ft=go ts=8 sw=8
 " -----------------------------------------------------------------------------
 " shell
 " -----------------------------------------------------------------------------
