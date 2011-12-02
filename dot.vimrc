@@ -371,7 +371,8 @@ endif
 if has('autocmd')
     augroup gofmtBuffer
     au!
-    autocmd BufWritePre *.go :call GoFormatBuffer()
+    autocmd BufWritePre  *.go :call GoFormatBuffer()
+    autocmd BufWritePost *.go retab!
     augroup END
 endif
 function! GoFormatBuffer()
