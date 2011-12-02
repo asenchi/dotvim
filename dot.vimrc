@@ -366,18 +366,24 @@ else
     set autoindent
 endif
 
-" The following automatically runs gofmt when you save a buffer. Makes it easy
-" to follow formatting rules and always keep your code according to standard.
+" golang has a formatting tool to standardize the way code is formatted.
+" Read the comments for an explanation:
 if has('autocmd')
     augroup gofmtBuffer
     au!
+    " Convert tabs to spaces when we open the file
+    autocmd BufReadPost  *.go retab!
     autocmd BufWritePre  *.go :call GoFormatBuffer()
+    " Convert tabs to spaces after we reformat and save the file
     autocmd BufWritePost *.go retab!
     augroup END
 endif
 function! GoFormatBuffer()
+    " Save our current position
     let curr=line(".")
+    " Run gofmt
     %!${GOROOT}/bin/gofmt
+    " Return to our saved position
     call cursor(curr, 1)
 endfunction
 
@@ -468,7 +474,7 @@ if has("autocmd")
 " -----------------------------------------------------------------------------
 " golang
 " -----------------------------------------------------------------------------
-    au BufRead,BufNewFile *.go       setlocal ft=go ts=8 sw=8
+    au BufRead,BufNewFile *.go       setlocal ft=go ts=8 sw=8 expandtab
 " -----------------------------------------------------------------------------
 " shell
 " -----------------------------------------------------------------------------
