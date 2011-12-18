@@ -130,6 +130,12 @@ let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 
 " -----------------------------------------------------------------------------
+" ctrlp
+" -----------------------------------------------------------------------------
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_working_path_mode = 1
+
+" -----------------------------------------------------------------------------
 " supertab
 " -----------------------------------------------------------------------------
 au FileType python set omnifunc=pythoncomplete#Complete
@@ -428,7 +434,7 @@ function! GuiTabLabel()
     return label
 endfunction
 
-nmap <C-S-P> :call <SID>SynStack()<CR>
+" nmap <C-S-P> :call <SID>SynStack()<CR>
 function! <SID>SynStack()
     if !exists("*synstack")
         return
