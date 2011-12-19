@@ -384,6 +384,7 @@ if has('autocmd')
     autocmd BufWritePost *.go retab!
     augroup END
 endif
+
 function! GoFormatBuffer()
     " Save our current position
     let curr=line(".")
