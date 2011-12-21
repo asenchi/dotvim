@@ -207,6 +207,10 @@ nmap <leader>W :w!<CR>
 " New line
 nmap <CR> o<Esc>
 
+" Some <space> hacks
+nnoremap <SPACE> :
+nnoremap <SPACE><SPACE> :!
+
 " Some sane shortcuts
 nmap F %
 nmap Y y$
