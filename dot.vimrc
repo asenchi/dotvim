@@ -85,6 +85,8 @@ set shiftwidth=4                " We default to 4 spaces
 set softtabstop=4               " "feels" like tabs are being inserted
 set showtabline=2               " display tab page
 set expandtab                   " use appropriate number of spaces insert-mode
+set shellcmdflag=-c
+set shell=/usr/bin/env\ zsh\ -l
 
 " -----------------------------------------------------------------------------
 " Search
@@ -114,8 +116,6 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 " -----------------------------------------------------------------------------
 set grepprg=git\ grep\ -n
 let $MANPAGER = '/usr/bin/less -is'
-set list
-set listchars=tab:▸\ ,eol:¬
 
 " -----------------------------------------------------------------------------
 " fugitive
@@ -208,22 +208,25 @@ nmap <leader>W :w!<CR>
 nmap <CR> o<Esc>
 
 " Some <space> hacks
-nnoremap <SPACE> :
+nnoremap <SPACE> <C-D>
 nnoremap <SPACE><SPACE> :!
 
 " Some sane shortcuts
 nmap F %
 nmap Y y$
-map <C-k> <C-W>k
-map <C-j> <C-W>j
-map <C-h> <C-W>h
-map <C-l> <C-W>l
+"map <C-k> <C-W>k
+"map <C-j> <C-W>j
+"map <C-h> <C-W>h
+"map <C-l> <C-W>l
 
 " Press '@h' and the character you want to use for heading (great for ReST)
 let @h = "yypVr"
 
 " Remove search hilight
 nnoremap <leader><space> :nohlsearch<CR>
+
+" Split line
+nnoremap S i<cr><esc><right>
 
 " Replace <ESC> functionality with easier to reach key cmds.
 inoremap jj <ESC>
@@ -330,21 +333,17 @@ function! StripWhitespace ()
 endfunction
 
 " -----------------------------------------------------------------------------
-" toggle between number and relative number on ,l
+" toggle listchars
 " -----------------------------------------------------------------------------
-"map <leader>n :call ToggleNumber()<CR>
-"if v:version >= 703
-"    set number
-"    nnoremap <leader>l :call ToggleRelativeAbsoluteNumber()<CR>
-"endif
-"
-"function! ToggleRelativeAbsoluteNumber()
-"    if &number
-"        set relativenumber
-"    else
-"        call ToggleNumber()
-"    endif
-"endfunction
+function! ToggleListChars()
+    if &list
+        set invlist
+    else
+        set list
+        set listchars=tab:▸·,eol:¬,trail:·
+    endif
+endfunction
+nmap <leader>' :call ToggleListChars()<CR>
 
 " -----------------------------------------------------------------------------
 " Open browser on the URL
