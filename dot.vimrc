@@ -132,7 +132,7 @@ let g:gist_open_browser_after_post = 1
 " -----------------------------------------------------------------------------
 " ctrlp
 " -----------------------------------------------------------------------------
-let g:ctrlp_map = '<c-p>'
+let g:ctrlp_map = '<leader>b'
 let g:ctrlp_working_path_mode = 1
 
 " -----------------------------------------------------------------------------
@@ -208,7 +208,6 @@ nmap <leader>W :w!<CR>
 nmap <CR> o<Esc>
 
 " Some <space> hacks
-nnoremap <SPACE> <C-D>
 nnoremap <SPACE><SPACE> :!
 
 " Some sane shortcuts
