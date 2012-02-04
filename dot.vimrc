@@ -38,7 +38,7 @@ set showmatch                   " show matches
 set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
-set pastetoggle=<F6>            " Turn off formatting when pasting
+set pastetoggle=<C-p>            " Turn off formatting when pasting
 
 " -----------------------------------------------------------------------------
 " Pathogen
@@ -69,8 +69,6 @@ let maplocalleader = "\\"
 " -----------------------------------------------------------------------------
 " Color!
 " -----------------------------------------------------------------------------
-colorscheme ron
-
 "if exists("&colorcolumn")
 "    set colorcolumn=80
 "endif
@@ -134,12 +132,6 @@ let g:gist_open_browser_after_post = 1
 " -----------------------------------------------------------------------------
 let g:ctrlp_map = '<leader>b'
 let g:ctrlp_working_path_mode = 1
-
-" -----------------------------------------------------------------------------
-" supertab
-" -----------------------------------------------------------------------------
-au FileType python set omnifunc=pythoncomplete#Complete
-let g:SuperTabDefaultCompletionType = "context"
 
 " -----------------------------------------------------------------------------
 " Completion
@@ -213,10 +205,10 @@ nnoremap <SPACE><SPACE> :!
 " Some sane shortcuts
 nmap F %
 nmap Y y$
-"map <C-k> <C-W>k
-"map <C-j> <C-W>j
-"map <C-h> <C-W>h
-"map <C-l> <C-W>l
+map <C-k> <C-W>k
+map <C-j> <C-W>j
+map <C-h> <C-W>h
+map <C-l> <C-W>l
 
 " Press '@h' and the character you want to use for heading (great for ReST)
 let @h = "yypVr"
@@ -251,6 +243,7 @@ cmap w!! %!sudo tee > /dev/null %
 " date shortcuts
 iab YMD <C-R>=strftime("%Y-%m-%d")<CR>
 iab NOW <C-R>=strftime("%c")<CR>
+
 " -----------------------------------------------------------------------------
 " tabs!
 " -----------------------------------------------------------------------------
