@@ -39,6 +39,7 @@ set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
 set pastetoggle=<C-p>            " Turn off formatting when pasting
+set matchpairs+=<:>
 
 " -----------------------------------------------------------------------------
 " Pathogen
@@ -141,22 +142,13 @@ set completeopt=menuone,longest,preview
 " -----------------------------------------------------------------------------
 " ConqueTerm
 " -----------------------------------------------------------------------------
-map <leader>E :call StartTerm()<CR>
+let g:ConqueTerm_InsertOnEnter = 0
+let g:ConqueTerm_TERM = 'xterm'
+
+map <leader>E :ConqueTermSplit zsh<CR>
 if has('gui_macvim')
-    map <D-e> :call StartTerm()<CR>
+    map <D-e> :ConqueTermSplit zsh<CR>
 endif
-
-function! StartTerm()
-    ConqueTermSplit zsh --login
-    setlocal listchars=tab:\ \
-endfunction
-
-" -----------------------------------------------------------------------------
-" ctags
-" -----------------------------------------------------------------------------
-let Tlist_Ctags_Cmd = '/Users/asenchi/Developer/bin/ctags'
-map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
-map <leader>c :TlistToggle<CR>
 
 " -----------------------------------------------------------------------------
 " NERDTree
