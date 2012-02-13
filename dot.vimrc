@@ -70,6 +70,7 @@ let maplocalleader = "\\"
 " -----------------------------------------------------------------------------
 " Color!
 " -----------------------------------------------------------------------------
+colorscheme badwolf
 "if exists("&colorcolumn")
 "    set colorcolumn=80
 "endif
@@ -235,6 +236,12 @@ cmap w!! %!sudo tee > /dev/null %
 " date shortcuts
 iab YMD <C-R>=strftime("%Y-%m-%d")<CR>
 iab NOW <C-R>=strftime("%c")<CR>
+
+" auto-indent according to surrounding code
+nnoremap <leader>p p
+nnoremap <leader>P P
+nnoremap p p'[v']=
+nnoremap P P'[v']=
 
 " -----------------------------------------------------------------------------
 " tabs!
