@@ -33,7 +33,9 @@ set showcmd
 set laststatus=2                " statusline tweaks
 set ch=1
 set textwidth=78                " 78 columns
-set scrolloff=3
+set scrolloff=8
+set sidescrolloff=20
+set sidescroll=1
 set showmatch                   " show matches
 set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
@@ -71,9 +73,9 @@ let maplocalleader = "\\"
 " Color!
 " -----------------------------------------------------------------------------
 colorscheme badwolf
-"if exists("&colorcolumn")
-"    set colorcolumn=80
-"endif
+if exists("&colorcolumn")
+    set colorcolumn=80
+endif
 
 " -----------------------------------------------------------------------------
 " Indentation
@@ -146,9 +148,16 @@ set completeopt=menuone,longest,preview
 let g:ConqueTerm_InsertOnEnter = 0
 let g:ConqueTerm_TERM = 'xterm'
 
-map <leader>E :ConqueTermSplit zsh<CR>
+map <leader>E :ConqueTermTab zsh<CR>
 if has('gui_macvim')
-    map <D-e> :ConqueTermSplit zsh<CR>
+    map <D-e> :ConqueTermTab zsh<CR>
+endif
+if has("autocmd")
+    augroup ct
+        au!
+        autocmd FileType conque_term set colorcolumn=0
+        autocmd FileType conque_term set invlist
+    augroup END
 endif
 
 " -----------------------------------------------------------------------------
@@ -220,7 +229,7 @@ map <leader>F <C-W>_
 
 " Move selection up and down
 map  <C-Down> ddp
-map  <C-Up>   dd<Up>P
+map  <C-Up>   ddkP
 vmap <C-Down> xp`[V`]
 vmap <C-Up>   x<Up>P`[V`]
 
@@ -246,11 +255,11 @@ nnoremap P P'[v']=
 " -----------------------------------------------------------------------------
 " tabs!
 " -----------------------------------------------------------------------------
-map tn <Esc>:tabnext<cr>
-map tp <Esc>:tabprev<cr>
-map tc <Esc>:tabnew<cr>
-map td <Esc>:tabclose<cr>
-map tm <Esc>:tabmove<cr>
+map <leader>tn <ESC>:tabnext<CR>
+map <leader>tp <ESC>:tabprev<CR>
+map <leader>tc <ESC>:tabnew<CR>
+map <leader>td <ESC>:tabclose<CR>
+map <leader>tm <ESC>:tabmove<CR>
 
 if &t_Co > 2 || has('gui_running')
     nmap <d-1> :tabn 1
@@ -305,10 +314,9 @@ if &t_Co > 2 || has('gui_running')
     set go-=T
     set go-=b
     set go-=h
-    set guifont=Inconsolata:h14
 
     if has('gui_macvim')
-        set guifont=DejaVu\ Sans\ Mono:h14
+        set guifont=DejaVu\ Sans\ Mono:h18
         set fuoptions=maxvert,maxhorz
         set background=light
         set antialias
