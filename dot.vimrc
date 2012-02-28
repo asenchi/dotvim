@@ -73,9 +73,6 @@ let maplocalleader = "\\"
 " Color!
 " -----------------------------------------------------------------------------
 colorscheme badwolf
-if exists("&colorcolumn")
-    set colorcolumn=80
-endif
 
 " -----------------------------------------------------------------------------
 " Indentation
@@ -158,6 +155,14 @@ if has("autocmd")
         autocmd FileType conque_term set colorcolumn=0
         autocmd FileType conque_term set invlist
     augroup END
+endif
+
+" -----------------------------------------------------------------------------
+" Color Column (only on insert)
+" -----------------------------------------------------------------------------
+if exists("&colorcolumn")
+    autocmd InsertEnter * set colorcolumn=80
+    autocmd InsertLeave * set colorcolumn=""
 endif
 
 " -----------------------------------------------------------------------------
@@ -373,28 +378,6 @@ if has('autocmd')
 else
     set autoindent
 endif
-
-" golang has a formatting tool to standardize the way code is formatted.
-" Read the comments for an explanation:
-if has('autocmd')
-    augroup gofmtBuffer
-    au!
-    " Convert tabs to spaces when we open the file
-    autocmd BufReadPost  *.go retab!
-    autocmd BufWritePre  *.go :call GoFormatBuffer()
-    " Convert tabs to spaces after we reformat and save the file
-    autocmd BufWritePost *.go retab!
-    augroup END
-endif
-
-function! GoFormatBuffer()
-    " Save our current position
-    let curr=line(".")
-    " Run gofmt
-    %!${GOROOT}/bin/gofmt
-    " Return to our saved position
-    call cursor(curr, 1)
-endfunction
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from.
