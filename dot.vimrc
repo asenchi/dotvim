@@ -369,9 +369,9 @@ if &t_Co > 2 || has('gui_running')
     set go-=h
 
     if has('gui_macvim')
-        set guifont=DejaVu\ Sans\ Mono:h18
+        set guifont=Droid\ Sans\ Mono:h14
         set fuoptions=maxvert,maxhorz
-        set background=light
+        set background=dark
         set antialias
     endif
 endif

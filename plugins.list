@@ -1,5 +1,6 @@
 https://github.com/mileszs/ack.vim.git
 https://github.com/tpope/vim-fugitive.git
+https://github.com/mattn/webapi-vim.git
 https://github.com/mattn/gist-vim.git
 https://github.com/tpope/vim-git.git
 https://github.com/scrooloose/nerdtree.git
@@ -9,3 +10,5 @@ https://github.com/kien/ctrlp.vim.git
 https://github.com/jordansissel/conque.git
 https://github.com/davidoc/taskpaper.vim.git
 https://github.com/sjl/badwolf.git
+https://github.com/kana/vim-smartinput.git
+https://github.com/sjl/vitality.vim.git
