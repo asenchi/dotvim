@@ -111,6 +111,9 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 set grepprg=git\ grep\ -n
 let $MANPAGER = '/usr/bin/less -is'
 
+colorscheme desert
+let g:Powerline_symbols = 'unicode'
+
 " -----------------------------------------------------------------------------
 " fugitive
 " -----------------------------------------------------------------------------
