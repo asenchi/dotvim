@@ -112,7 +112,6 @@ set grepprg=git\ grep\ -n
 let $MANPAGER = '/usr/bin/less -is'
 
 colorscheme desert
-let g:Powerline_symbols = 'unicode'
 
 " -----------------------------------------------------------------------------
 " fugitive
@@ -136,24 +135,6 @@ let g:ctrlp_working_path_mode = 1
 " Completion
 " -----------------------------------------------------------------------------
 set completeopt=menuone,longest,preview
-
-" -----------------------------------------------------------------------------
-" ConqueTerm
-" -----------------------------------------------------------------------------
-let g:ConqueTerm_InsertOnEnter = 0
-let g:ConqueTerm_TERM = 'xterm'
-
-map <leader>E :ConqueTermTab zsh<CR>
-if has('gui_macvim')
-    map <D-e> :ConqueTermTab zsh<CR>
-endif
-if has("autocmd")
-    augroup ct
-        au!
-        autocmd FileType conque_term set colorcolumn=0
-        autocmd FileType conque_term set invlist
-    augroup END
-endif
 
 " -----------------------------------------------------------------------------
 " Color Column (only on insert)
