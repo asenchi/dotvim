@@ -142,9 +142,9 @@ set completeopt=menuone,longest,preview
 let g:ConqueTerm_InsertOnEnter = 0
 let g:ConqueTerm_TERM = 'xterm'
 
-map <leader>E :ConqueTermTab zsh<CR>
+map <leader>E :ConqueTermSplit zsh<CR>
 if has('gui_macvim')
-    map <D-e> :ConqueTermTab zsh<CR>
+    map <D-e> :ConqueTermSplit zsh<CR>
 endif
 if has("autocmd")
     augroup ct
