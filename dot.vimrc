@@ -40,7 +40,7 @@ set showmatch                   " show matches
 set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
-set pastetoggle=<C-p>            " Turn off formatting when pasting
+"set pastetoggle=<C-f>            " Turn off formatting when pasting
 set matchpairs+=<:>
 
 " -----------------------------------------------------------------------------
@@ -128,8 +128,8 @@ let g:gist_open_browser_after_post = 1
 " -----------------------------------------------------------------------------
 " ctrlp
 " -----------------------------------------------------------------------------
-let g:ctrlp_map = '<C-x>'
-let g:ctrlp_working_path_mode = 1
+let g:ctrlp_map = '<C-p>'
+let g:ctrlp_working_path_mode = 'rc'
 
 " -----------------------------------------------------------------------------
 " Completion
