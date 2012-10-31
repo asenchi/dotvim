@@ -1,32 +1,6 @@
 # dotvim
 
-dotvim contains my personal Vim setup. It's managed using Pathogen and Redo
-for building the plugin setup.
-
-This is brand new so currently I only have a few plugins setup, as they were
-all located at github and it was easy to get it working.
-
-I have Pathogen seperated out from the rest of the plugins. Working on a
-better solution for this.
-
-# Usage
-
-Get the repository:
-
-    git clone https://github.com/asenchi/dotvim ~/.vim
-    cd ~/.vim
-    redo pathogen  # If you haven't installed pathogen.
-    redo all clean # Substitute './bin/do' if you do not have 'redo'.
-
-# Adding plugins
-
-Currently only git is supported, but that shouldn't be too big of an issue
-considering this [repo](https://github.com/vim-scripts).
-
-To add a plugin, paste the git link into plugins.list and then run:
-
-    redo # Or ./bin/do if you do not have 'redo'
-    
+My .vimrc
 
 # LICENSE
 
