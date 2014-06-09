@@ -6,11 +6,11 @@
 " LICENSE
 " -----------------------------------------------------------------------------
 " Copyright (c) 2011, Curt Micol <asenchi@asenchi.com>
-" 
+"
 " Permission to use, copy, modify, and/or distribute this software for any
 " purpose with or without fee is hereby granted, provided that the above
 " copyright notice and this permission notice appear in all copies.
-" 
+"
 " THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
 " WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
 " MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
@@ -32,7 +32,7 @@ set title
 set showcmd
 set laststatus=2                " statusline tweaks
 set ch=1
-set textwidth=78                " 78 columns
+"set textwidth=78                " 78 columns
 set scrolloff=8
 set sidescrolloff=20
 set sidescroll=1
@@ -41,7 +41,11 @@ set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
 "set pastetoggle=<C-f>            " Turn off formatting when pasting
+set pastetoggle=<F6>            " Turn off formatting when pasting
 set matchpairs+=<:>
+set switchbuf=useopen
+set autoread
+set nostartofline
 
 " -----------------------------------------------------------------------------
 " Pathogen
@@ -56,9 +60,7 @@ filetype plugin indent on
 " PATH
 " -----------------------------------------------------------------------------
 if system('uname') =~ 'Darwin'
-    let $PATH = '~/Developer/bin:' .
-        \ '~/Developer/share/python:' .
-        \ '/usr/local/bin:/usr/local/sbin:' .
+    let $PATH = '/usr/local/bin:/usr/local/sbin:' .
         \ $PATH
 endif
 
@@ -103,7 +105,8 @@ set noswapfile
 " -----------------------------------------------------------------------------
 set wildmenu                    " enhanced command-line completion
 set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
+set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif,*.gitkeep
+set wildignore+=*.gem
 
 " -----------------------------------------------------------------------------
 " misc
@@ -111,12 +114,12 @@ set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,.DS_Store,*.jpg,*.png,*.gif
 set grepprg=git\ grep\ -n
 let $MANPAGER = '/usr/bin/less -is'
 
-colorscheme badwolf
+colorscheme delek
 
 " -----------------------------------------------------------------------------
 " fugitive
 " -----------------------------------------------------------------------------
-let g:fugitive_git_executable = '~/Developer/bin/git'
+let g:fugitive_git_executable = 'git'
 
 " -----------------------------------------------------------------------------
 " gist
@@ -139,20 +142,20 @@ set completeopt=menuone,longest,preview
 " -----------------------------------------------------------------------------
 " ConqueTerm
 " -----------------------------------------------------------------------------
-let g:ConqueTerm_InsertOnEnter = 0
-let g:ConqueTerm_TERM = 'xterm'
-
-map <leader>E :ConqueTermSplit zsh<CR>
-if has('gui_macvim')
-    map <D-e> :ConqueTermSplit zsh<CR>
-endif
-if has("autocmd")
-    augroup ct
-        au!
-        autocmd FileType conque_term set colorcolumn=0
-        autocmd FileType conque_term set invlist
-    augroup END
-endif
+" let g:ConqueTerm_InsertOnEnter = 0
+" let g:ConqueTerm_TERM = 'xterm'
+"
+" map <leader>E :ConqueTermSplit zsh<CR>
+" if has('gui_macvim')
+"     map <D-e> :ConqueTermSplit zsh<CR>
+" endif
+" if has("autocmd")
+"     augroup ct
+"         au!
+"         autocmd FileType conque_term set colorcolumn=0
+"         autocmd FileType conque_term set invlist
+"     augroup END
+" endif
 
 " -----------------------------------------------------------------------------
 " Color Column (only on insert)
@@ -161,6 +164,14 @@ if exists("&colorcolumn")
     autocmd InsertEnter * set colorcolumn=80
     autocmd InsertLeave * set colorcolumn=""
 endif
+
+" -----------------------------------------------------------------------------
+" Notes
+" -----------------------------------------------------------------------------
+map <leader>n :call EditNotes()<CR>
+function! EditNotes()
+    execute ':tabedit ~/TODO.md'
+endfunction
 
 " -----------------------------------------------------------------------------
 " vimrc hax
@@ -215,7 +226,7 @@ let @h = "yypVr"
 nnoremap <leader><space> :nohlsearch<CR>
 
 " Split line
-nnoremap S i<cr><esc><right>
+nnoremap S i<cr><esc>
 
 " Replace <ESC> functionality with easier to reach key cmds.
 inoremap jj <ESC>
@@ -235,6 +246,13 @@ map  <C-a> 0
 imap <C-a> <C-o>0
 imap <C-e> <C-o>$
 
+" TODO hacks from rtomayko
+map ,a o<ESC>:r!date +'\%A, \%B \%d, \%Y'<ESC>I### <ESC><CR><CR>
+map ,o o- [ ]
+map ,O O- [ ]
+map ,x :s/^-\ \[ \]/-\ [x]/<CR>:nohlsearch<CR>
+map ,X :s/^-\ \[x\]/-\ [ ]/<CR>:nohlsearch<CR>
+
 " For when I need to sudo a sandwich
 cmap w!! %!sudo tee > /dev/null %
 
@@ -248,57 +266,14 @@ nnoremap <leader>P P
 nnoremap p p'[v']=
 nnoremap P P'[v']=
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Running tests
-" https://github.com/garybernhardt/dotfiles/blob/master/.vimrc#L505
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! RunTests(filename)
-    " Write the file and run tests for the given filename
-    :w
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    if filereadable("script/test")
-        exec ":!script/test " . a:filename
-    elseif filereadable("Gemfile")
-        exec ":!bundle exec rspec --color --format=documentation " . a:filename
-    else
-        exec ":!rspec --color --format=documentation " . a:filename
-    end
-endfunction
-
-function! SetTestFile()
-    " Set the spec file that tests will be run for.
-    let t:grb_test_file=@%
-endfunction
-
-function! RunTestFile(...)
-    if a:0
-        let command_suffix = a:1
-    else
-        let command_suffix = ""
-    endif
-
-    " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
-    if in_test_file
-        call SetTestFile()
-    elseif !exists("t:grb_test_file")
-        return
-    end
-    call RunTests(t:grb_test_file . command_suffix)
-endfunction
-
-function! RunNearestTest()
-    let spec_line_number = line('.')
-    call RunTestFile(":" . spec_line_number . " -b")
-endfunction
-
-map <leader>t :call RunTestFile()<cr>
-map <leader>T :call RunNearestTest()<cr>
-map <leader>a :call RunTests('')<cr>
+map <leader>st :Gstatus<CR>
+map <leader>di :Gdiff<CR>
+map <leader>ad :Gwrite<CR>
 
 " -----------------------------------------------------------------------------
 " tabs!
 " -----------------------------------------------------------------------------
+map <leader>t :tabnew %<CR>
 map <leader>tn <ESC>:tabnext<CR>
 map <leader>tp <ESC>:tabprev<CR>
 map <leader>tc <ESC>:tabnew<CR>
@@ -429,6 +404,31 @@ endif
 " -----------------------------------------------------------------------------
 " Functions
 " -----------------------------------------------------------------------------
+function! GetMode()
+    let mode = mode()
+
+    if mode ==# 'v'
+        let mode = "VISUAL"
+    elseif mode ==# 'V'
+        let mode = "V-LINE"
+    elseif mode ==# ''
+        let mode = "V-BLOCK"
+    elseif mode ==# 's'
+        let mode = "SELECT"
+    elseif mode ==# 'S'
+        let mode = "S-LINE"
+    elseif mode ==# ''
+        let mode = "S-BLOCK"
+    elseif mode =~# '\vi'
+        let mode = "INSERT"
+    elseif mode =~# '\v(R|Rv)'
+        let mode = "REPLACE"
+    else
+        let mode = "NORMAL"
+    endif
+    return mode
+endfunction
+
 function! CurDir()
     let curdir = getcwd()
     let curdir_a = split(curdir, '/')
@@ -480,8 +480,8 @@ if has("autocmd")
 " -----------------------------------------------------------------------------
 " markdown
 " -----------------------------------------------------------------------------
-    au BufRead,BufNewFile *.md       setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
-    au BufRead,BufNewFile *.markdown setlocal ft=mkd tw=78 ts=2 sw=2 expandtab
+    au BufRead,BufNewFile *.md       setlocal ft=mkd ts=2 sw=2 expandtab
+    au BufRead,BufNewFile *.markdown setlocal ft=mkd ts=2 sw=2 expandtab
 " -----------------------------------------------------------------------------
 " ReST
 " -----------------------------------------------------------------------------
@@ -497,11 +497,12 @@ if has("autocmd")
     au BufRead,BufNewFile Rakefile   setlocal ft=ruby
     au BufRead,BufNewFile Thorfile   setlocal ft=ruby
     au BufRead,BufNewFile *.ru       setlocal ft=ruby
-    au FileType ruby                 setlocal tw=80 ts=2 sts=2 sw=2 expandtab
+    au FileType ruby                 setlocal tw=78 ts=2 sts=2 sw=2 expandtab
+    au FileType yaml                 setlocal tw=78 ts=2 sts=2 sw=2 expandtab
 " -----------------------------------------------------------------------------
 " redo
 " -----------------------------------------------------------------------------
-    au BufRead,BufNewFile *.do       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.do       setlocal ft=sh tw=78 ts=4 sw=4 expandtab
 " -----------------------------------------------------------------------------
 " golang
 " -----------------------------------------------------------------------------
@@ -509,9 +510,9 @@ if has("autocmd")
 " -----------------------------------------------------------------------------
 " shell
 " -----------------------------------------------------------------------------
-    au BufRead,BufNewFile *.sh       setlocal ft=sh tw=80 ts=4 sw=4 expandtab
-    au BufRead,BufNewFile *.zsh      setlocal ft=sh tw=80 ts=4 sw=4 expandtab
-    au BufRead,BufNewFile *.bash     setlocal ft=sh tw=80 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.sh       setlocal ft=sh tw=78 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.zsh      setlocal ft=sh tw=78 ts=4 sw=4 expandtab
+    au BufRead,BufNewFile *.bash     setlocal ft=sh tw=78 ts=4 sw=4 expandtab
 " -----------------------------------------------------------------------------
 " html/css
 " -----------------------------------------------------------------------------
@@ -521,6 +522,7 @@ if has("autocmd")
 " javascript
 " -----------------------------------------------------------------------------
     au FileType javascript setlocal ts=4 sts=4 sw=4 expandtab
+    au FileType coffee     setlocal ts=2 sts=2 sw=2 expandtab
 " -----------------------------------------------------------------------------
 " git
 " -----------------------------------------------------------------------------
@@ -534,9 +536,8 @@ if has("autocmd")
 " -----------------------------------------------------------------------------
     au FileType perl setlocal mp=perl\ -c\ %\ $* errorformat=%f:%l:%m aw
 " -----------------------------------------------------------------------------
+" puppet
+" -----------------------------------------------------------------------------
+    au BufRead,BufNewFile *.pp setlocal ft=puppet ts=2 sw=2 expandtab
+" -----------------------------------------------------------------------------
 endif
-
-" -----------------------------------------------------------------------------
-" statusline
-" -----------------------------------------------------------------------------
-set stl=%{fugitive#statusline()}[%l,%v\ %P%M]\ %f\ %r%h%w\ %r%{CurDir()}%h
