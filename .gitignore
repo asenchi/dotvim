@@ -1,5 +1,5 @@
 bundle/
-autoload/
+autoload/pathogen.vim
 *.git
 *.did
 .do_built*
