@@ -32,7 +32,6 @@ set title
 set showcmd
 set laststatus=2                " statusline tweaks
 set ch=1
-"set textwidth=78                " 78 columns
 set scrolloff=8
 set sidescrolloff=20
 set sidescroll=1
@@ -40,7 +39,6 @@ set showmatch                   " show matches
 set linebreak
 set backspace=indent,eol,start  " backspace across lines and indents
 set whichwrap+=<,>,[,],h,l      " allow us to move across lines
-"set pastetoggle=<C-f>            " Turn off formatting when pasting
 set pastetoggle=<F6>            " Turn off formatting when pasting
 set matchpairs+=<:>
 set switchbuf=useopen
@@ -48,7 +46,7 @@ set autoread
 set nostartofline
 
 " -----------------------------------------------------------------------------
-" Pathogen
+" Plugins
 " -----------------------------------------------------------------------------
 filetype off
 let s:bundles = tr(globpath(&runtimepath, 'bundle/*/'), "\n", ',')
@@ -81,8 +79,10 @@ set shiftwidth=4                " We default to 4 spaces
 set softtabstop=4               " "feels" like tabs are being inserted
 set showtabline=2               " display tab page
 set expandtab                   " use appropriate number of spaces insert-mode
+
 set shellcmdflag=-c
-set shell=/usr/bin/env\ zsh\ -l
+set shell=/usr/bin/env\ bash\ -l
+set rtp+=/usr/local/opt/fzf
 
 " -----------------------------------------------------------------------------
 " Search
@@ -114,7 +114,7 @@ set wildignore+=*.gem
 set grepprg=git\ grep\ -n
 let $MANPAGER = '/usr/bin/less -is'
 
-colorscheme delek
+syntax on
 
 " -----------------------------------------------------------------------------
 " fugitive
@@ -129,33 +129,15 @@ let g:gist_detect_filetype = 1
 let g:gist_open_browser_after_post = 1
 
 " -----------------------------------------------------------------------------
-" ctrlp
+" fzf
 " -----------------------------------------------------------------------------
-let g:ctrlp_map = '<C-p>'
-let g:ctrlp_working_path_mode = 'rc'
+nmap <leader>b :Buffers<CR>
+nmap <C-p> :Files<CR>
 
 " -----------------------------------------------------------------------------
 " Completion
 " -----------------------------------------------------------------------------
 set completeopt=menuone,longest,preview
-
-" -----------------------------------------------------------------------------
-" ConqueTerm
-" -----------------------------------------------------------------------------
-" let g:ConqueTerm_InsertOnEnter = 0
-" let g:ConqueTerm_TERM = 'xterm'
-"
-" map <leader>E :ConqueTermSplit zsh<CR>
-" if has('gui_macvim')
-"     map <D-e> :ConqueTermSplit zsh<CR>
-" endif
-" if has("autocmd")
-"     augroup ct
-"         au!
-"         autocmd FileType conque_term set colorcolumn=0
-"         autocmd FileType conque_term set invlist
-"     augroup END
-" endif
 
 " -----------------------------------------------------------------------------
 " Color Column (only on insert)
@@ -219,6 +201,10 @@ map <C-j> <C-W>j
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
+" Move between open buffers.
+nmap <C-f> :bnext<CR>
+nmap <C-b> :bprev<CR>
+
 " Press '@h' and the character you want to use for heading (great for ReST)
 let @h = "yypVr"
 
@@ -241,17 +227,8 @@ vmap <C-Down> xp`[V`]
 vmap <C-Up>   x<Up>P`[V`]
 
 " mimic some common emacs keys
-map  <C-e> $
-map  <C-a> 0
 imap <C-a> <C-o>0
 imap <C-e> <C-o>$
-
-" TODO hacks from rtomayko
-map ,a o<ESC>:r!date +'\%A, \%B \%d, \%Y'<ESC>I### <ESC><CR><CR>
-map ,o o- [ ]
-map ,O O- [ ]
-map ,x :s/^-\ \[ \]/-\ [x]/<CR>:nohlsearch<CR>
-map ,X :s/^-\ \[x\]/-\ [ ]/<CR>:nohlsearch<CR>
 
 " For when I need to sudo a sandwich
 cmap w!! %!sudo tee > /dev/null %
@@ -265,10 +242,6 @@ nnoremap <leader>p p
 nnoremap <leader>P P
 nnoremap p p'[v']=
 nnoremap P P'[v']=
-
-map <leader>st :Gstatus<CR>
-map <leader>di :Gdiff<CR>
-map <leader>ad :Gwrite<CR>
 
 " -----------------------------------------------------------------------------
 " tabs!
